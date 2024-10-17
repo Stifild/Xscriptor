@@ -11,18 +11,20 @@ class TellWithMeCommandCompiler:
         """
         This method compiles command based on the provided flag and data.
         """
-        if flag == "IC":
-            command = f"IC::::{data}"
+        if flag == "IR":
+            command = f"IR::::{data}"
         elif flag == "FIN":
-            command = "FIN::::0.0.0"
+            command = f"FIN::::{data}"
         elif flag == "ACK":
-            command = "ACK::::0.0.0"
+            command = f"ACK::::{data}"
         elif flag == "EDCN":
-            command = "EDCN::::0.0.0"
+            command = f"EDCN::::{data}"
         elif flag == "INF":
             command = f"INF::::{data}"
         elif flag == "ERR":
             command = f"ERR::::{data}"
+        elif flag == "IND":
+            command = f"IND::::{data}"
         else:
             raise ValueError(f"Unknown flag: {flag}")
         return command
@@ -98,12 +100,13 @@ class TellWithMeCommunicator(
     """
     This class need for communication between computers.
     """
+    myAddress: str
 
     def send(self, command: str, address: str, flag: str, log_message: str):
         """
         This method send command to another computer.
         """
-        message = f"From: xscriptor.smtp.twm@mail.ru\nTo: xscriptor.smtp.twm@mail.ru\nSubject: 0.0.0:{address}:{flag}\n\n{log_message}(|||){self.compileCommand(flag, command)}"
+        message = f"From: xscriptor.smtp.twm@mail.ru\nTo: xscriptor.smtp.twm@mail.ru\nSubject: {self.myAddress}:{address}:{flag}\n\n{log_message}(|||){self.compileCommand(flag, command)}"
         server = smtplib.SMTP("smtp.mail.ru", 465)
         server.starttls()
         server.login("xscriptor.smtp.twm@mail.ru", "ic7pCamjEjvdn4a52djU")
@@ -142,22 +145,11 @@ class TellWithMeCommunicator(
             if self.getFlagFromCommand(rawEmailReceive[1]) != "EDCN"
             else None
         )
-        if self.getFlagFromCommand(rawEmailReceive[1]) == "IND":
-            address = self.generateAddress(
-                self.getCommandFromCommand(rawEmailReceive[1])
-            )
-            name = self.getCommandFromCommand(rawEmailReceive[1])["name"]
-            self.send(
-                {"address": address, "name": name},
-                "255.255.255",
-                "INF",
-                "Address generated",
-            )
+        if self.getFlagFromCommand(rawEmailReceive[1]) == "INF":
+            return self.getCommandFromCommand(rawEmailReceive[1])            
         if self.getFlagFromCommand(rawEmailReceive[1]) == "EDCN":
-            self.RemoveAddress(
-                self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip()
-            )
-        if self.getFlagFromCommand(rawEmailReceive[1]) == "IR":
+            exit()
+        if self.getFlagFromCommand(rawEmailReceive[1]) == "IC":
             return self.getCommandFromCommand(rawEmailReceive[1])
         if self.getFlagFromCommand(rawEmailReceive[1]) == "ERR":
             return self.getCommandFromCommand(rawEmailReceive[1])
