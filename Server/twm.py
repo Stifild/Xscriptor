@@ -124,7 +124,7 @@ class TellWithMeCommunicator(
         mail_ids = data[0]
         id_list = mail_ids.split()
         if not id_list:
-            return None, None
+            return 0, 0
         latest_email_id = id_list[-1]
         _, data = mail.fetch(latest_email_id, "(RFC822)")
         raw_email = data[0][1]
