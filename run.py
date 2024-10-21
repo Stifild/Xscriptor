@@ -1,4 +1,4 @@
-from Server.configs import ROLE, MAIN_USER_ID
+from configs import ROLE, MAIN_USER_ID
 from Server.main import bot
 from Server.twm import TellWithMe as SeTWM
 from Subord.twm import TellWithMe as SuTWM
