@@ -2,3 +2,4 @@
 data.json
 configs.py
 config.py
+__pycache__/
