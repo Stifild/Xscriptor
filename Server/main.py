@@ -1,6 +1,6 @@
 from configs import TELEGRAM_API_KEY, MAIN_USER_ID
 import telebot
-from Server.twm import TellWithMe as TWM
+from twm import TellWithMe as TWM
 from telebot import util, types
 
 twm = TWM()
