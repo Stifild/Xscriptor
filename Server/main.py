@@ -13,7 +13,7 @@ def start(message):
     else:
         bot.send_message(message.chat.id, 'You are not authorized to use this bot.')
 
-@bot.message_handler(commands=["poweroff"])
+@bot.message_handler(commands=["send"])
 def sendCommand(message: types.Message):
     if message.from_user.id == MAIN_USER_ID:
         rawCommand = util.extract_arguments(message.text)
