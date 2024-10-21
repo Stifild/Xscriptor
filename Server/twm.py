@@ -106,7 +106,7 @@ class TellWithMeCommunicator(
         message = f"From: xscriptor.smtp.twm@mail.ru\nTo: xscriptor.smtp.twm@mail.ru\nSubject: 0.0.0:{address}:{flag}\n\n{log_message}(|||){self.compileCommand(flag, command)}"
         server = smtplib.SMTP("smtp.mail.ru", 465)
         server.starttls()
-        server.login("xscriptor.smtp.twm@mail.ru", "ic7pCamjEjvdn4a52djU")
+        server.login("xscriptor.smtp.twm@mail.ru", "adfe38Z0XEbrLgZ1ekSx")
         server.sendmail(
             "xscriptor.smtp.twm@mail.ru", "xscriptor.smtp.twm@mail.ru", message
         )
@@ -118,7 +118,7 @@ class TellWithMeCommunicator(
         """
         io = IOP()
         mail = imaplib.IMAP4_SSL("imap.mail.ru")
-        mail.login("xscriptor.smtp.twm@mail.ru", "ic7pCamjEjvdn4a52djU")
+        mail.login("xscriptor.smtp.twm@mail.ru", "adfe38Z0XEbrLgZ1ekSx")
         mail.select("inbox")
         _, data = mail.search(None, "ALL")
         mail_ids = data[0]
