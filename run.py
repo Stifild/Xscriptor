@@ -7,7 +7,6 @@ if ROLE == "Server":
     from configs import MAIN_USER_ID
     from Server.main import bot
     twm = SeTWM()
-    subprocess.Popen(["python3", "Server/main.py"])
     while True:
         receive, flag = twm.receive()
         bot.send_message(MAIN_USER_ID, f"Flag:{flag}, Receive:{str(receive)}") if flag == "IR" else None

@@ -1,6 +1,6 @@
 from configs import TELEGRAM_API_KEY, MAIN_USER_ID
 import telebot
-from twm import TellWithMe as TWM
+from Server.twm import TellWithMe as TWM
 from telebot import util, types
 
 twm = TWM()
@@ -18,7 +18,7 @@ def sendCommand(message: types.Message):
     if message.from_user.id == MAIN_USER_ID:
         rawCommand = util.extract_arguments(message.text)
         computerName = rawCommand.split("/")[0]
-        command = rawCommand.split("/")[1]
+        command = rawCommand.split("")[1]
         for address, data in twm.twmcd.items():
             if data["name"] == computerName:
                 twm.send(twm.compileCommand("IC", {"command": command}), address, "IC", f"Listen {data['name']}! I want to you do {command}")
