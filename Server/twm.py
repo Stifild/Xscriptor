@@ -128,39 +128,48 @@ class TellWithMeCommunicator(
         raw_email = data[0][1]
         raw_email_string = raw_email.decode("utf-8")
         email_message = email.message_from_string(raw_email_string)
-        mail.store(latest_email_id, "+FLAGS", "\\Deleted")
-        mail.expunge()
-        io.addRecordToEventLog(f"Incoming message: {email_message.get_payload()}")
+        
         rawEmailReceive = email_message.get_payload().split("(|||)")
         (
             self.send(
-                None,
-                self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip(),
-                "ACK",
-                "Message received",
+            None,
+            self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip(),
+            "ACK",
+            "Message received",
             )
-            if self.getFlagFromCommand(rawEmailReceive[1]) != "EDCN"
+            if self.getFlagFromCommand(rawEmailReceive[1]) != "EDCN" or self.getFlagFromCommand(rawEmailReceive[1]) != "ACK"
             else None
         )
         if self.getFlagFromCommand(rawEmailReceive[1]) == "IND":
             address = self.generateAddress(
-                self.getCommandFromCommand(rawEmailReceive[1])
+            self.getCommandFromCommand(rawEmailReceive[1])
             )
             name = self.getCommandFromCommand(rawEmailReceive[1])["name"]
             self.send(
-                {"address": address, "name": name},
-                "255.255.255",
-                "INF",
-                "Address generated",
+            {"address": address, "name": name},
+            "255.255.255",
+            "INF",
+            "Address generated",
             )
         if self.getFlagFromCommand(rawEmailReceive[1]) == "EDCN":
             self.RemoveAddress(
-                self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip()
+            self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip()
             )
         if self.getFlagFromCommand(rawEmailReceive[1]) == "IR":
-            return self.getCommandFromCommand(rawEmailReceive[1])
-        if self.getFlagFromCommand(rawEmailReceive[1]) == "ERR":
-            return self.getCommandFromCommand(rawEmailReceive[1])
+            result = self.getCommandFromCommand(rawEmailReceive[1]), self.getFlagFromCommand(rawEmailReceive[1])
+        elif self.getFlagFromCommand(rawEmailReceive[1]) == "ERR":
+            result = self.getCommandFromCommand(rawEmailReceive[1]), self.getFlagFromCommand(rawEmailReceive[1])
+        else:
+            result = None, None
+        
+        # Delete email if address is 0.0.0
+        if self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip() == "0.0.0":
+            mail.store(latest_email_id, "+FLAGS", "\\Deleted")
+            mail.expunge()
+        
+        io.addRecordToEventLog(f"Incoming message: {email_message.get_payload()}")
+        mail.logout()
+        return result
 
 
 class TellWithMe(

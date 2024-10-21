@@ -117,9 +117,8 @@ class TellWithMeCommunicator(
 
     def receive(self):
         """
-        This method receive command from another computer.
+        This method receive command from another server.
         """
-        io = IOP()
         mail = imaplib.IMAP4_SSL("imap.mail.ru")
         mail.login("xscriptor.smtp.twm@mail.ru", "ic7pCamjEjvdn4a52djU")
         mail.select("inbox")
@@ -130,29 +129,34 @@ class TellWithMeCommunicator(
         _, data = mail.fetch(latest_email_id, "(RFC822)")
         raw_email = data[0][1]
         raw_email_string = raw_email.decode("utf-8")
-        email_message = email.message_from_string(raw_email_string)
-        mail.store(latest_email_id, "+FLAGS", "\\Deleted")
-        mail.expunge()
-        io.addRecordToEventLog(f"Incoming message: {email_message.get_payload()}")
-        rawEmailReceive = email_message.get_payload().split("(|||)")
-        (
-            self.send(
-                None,
-                self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip(),
-                "ACK",
-                "Message received",
-            )
-            if self.getFlagFromCommand(rawEmailReceive[1]) != "EDCN"
-            else None
-        )
-        if self.getFlagFromCommand(rawEmailReceive[1]) == "INF":
-            return self.getCommandFromCommand(rawEmailReceive[1])            
-        if self.getFlagFromCommand(rawEmailReceive[1]) == "EDCN":
+        rawEmailReceive = raw_email_string.split("(|||)")
+
+        subject = self.getSubjectFromEmail(raw_email_string)
+        recipient_address = subject.split(":")[1]
+
+        if recipient_address != self.myAddress:
+            return None, None
+
+        flag = self.getFlagFromCommand(rawEmailReceive[1])
+        command = self.getCommandFromCommand(rawEmailReceive[1])
+
+        if flag == "INF":
+            result = (command, flag)
+        elif flag == "EDCN":
             exit()
-        if self.getFlagFromCommand(rawEmailReceive[1]) == "IC":
-            return self.getCommandFromCommand(rawEmailReceive[1])
-        if self.getFlagFromCommand(rawEmailReceive[1]) == "ERR":
-            return self.getCommandFromCommand(rawEmailReceive[1])
+        elif flag == "IC":
+            result = (command, flag)
+        elif flag == "ERR":
+            result = (command, flag)
+        else:
+            result = (None, None)
+
+        # Mark the email as deleted
+        mail.store(latest_email_id, '+FLAGS', '\\Deleted')
+        mail.expunge()
+        mail.logout()
+
+        return result
 
 
 class TellWithMe(
