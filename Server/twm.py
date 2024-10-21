@@ -104,7 +104,7 @@ class TellWithMeCommunicator(
         This method send command to another computer.
         """
         message = f"From: xscriptor.smtp.twm@mail.ru\nTo: xscriptor.smtp.twm@mail.ru\nSubject: 0.0.0:{address}:{flag}\n\n{log_message}(|||){self.compileCommand(flag, command)}"
-        server = smtplib.SMTP("smtp.mail.ru", 465)
+        server = smtplib.SMTP("smtp.mail.ru", 25)
         server.starttls()
         server.login("xscriptor.smtp.twm@mail.ru", "adfe38Z0XEbrLgZ1ekSx")
         server.sendmail(

@@ -1,10 +1,11 @@
-from configs import ROLE, MAIN_USER_ID
-from Server.main import bot
+from configs import ROLE
 from Server.twm import TellWithMe as SeTWM
 from Subord.twm import TellWithMe as SuTWM
 import threading, os, subprocess, socket, platform
 
 if ROLE == "Server":
+    from configs import MAIN_USER_ID
+    from Server.main import bot
     twm = SeTWM()
     subprocess.Popen(["python3", "Server/main.py"])
     checkMail = threading.Timer(3.5, twm.receive())
