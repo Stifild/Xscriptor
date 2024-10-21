@@ -28,6 +28,15 @@ From and To have to be the same email address. Subject contains information abou
 * IND - Request for identification
 * INF - Information message
 * ACK - Acknowledgment
+##### Commands
+* IC - <bash or cmd command>
+* IR - <response>
+* FIN - <Sender address>
+* ERR - <error message>
+* EDCN - <Sender address>
+* IND - <computer name>
+* INF - <data>
+* ACK - <Sender address>
 ##### Computer identification address
 All computers have a unique identification address. It is looks like base IPv4 address, but use only 3 octets. For example: "0.0.1". Network has a reserved address "0.0.0" for main server and "255.255.255" for broadcast messages.
 ### TWMCD
