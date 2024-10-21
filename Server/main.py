@@ -17,8 +17,8 @@ def start(message):
 def sendCommand(message: types.Message):
     if message.from_user.id == MAIN_USER_ID:
         rawCommand = util.extract_arguments(message.text)
-        computerName = rawCommand.split(" ")[0]
-        command = rawCommand.split(" ")[1]
+        computerName = rawCommand.split("/")[0]
+        command = rawCommand.split("/")[1]
         for address, data in twm.twmcd.items():
             if data["name"] == computerName:
                 twm.send(twm.compileCommand("IC", {"command": command}), address, "IC", f"Listen {data['name']}! I want to you do {command}")
