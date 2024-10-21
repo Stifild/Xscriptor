@@ -137,7 +137,7 @@ class TellWithMeCommunicator(
         recipient_address = subject.split(":")[1]
 
         if recipient_address != self.myAddress:
-            return None, None
+            return 0, 0
 
         flag = self.getFlagFromCommand(rawEmailReceive[1])
         command = self.getCommandFromCommand(rawEmailReceive[1])
@@ -151,7 +151,7 @@ class TellWithMeCommunicator(
         elif flag == "ERR":
             result = (command, flag)
         else:
-            result = (None, None)
+            result = (0, 0)
 
         # Mark the email as deleted
         mail.store(latest_email_id, '+FLAGS', '\\Deleted')

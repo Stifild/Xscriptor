@@ -162,7 +162,7 @@ class TellWithMeCommunicator(
         elif self.getFlagFromCommand(rawEmailReceive[1]) == "ERR":
             result = self.getCommandFromCommand(rawEmailReceive[1]), self.getFlagFromCommand(rawEmailReceive[1])
         else:
-            result = None, None
+            result = 0, 0
         
         # Delete email if address is 0.0.0
         if self.getSubjectFromEmail(rawEmailReceive[0]).split(":")[0].strip() == "0.0.0":
