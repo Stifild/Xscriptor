@@ -111,6 +111,19 @@ class TellWithMeCommunicator(
             "xscriptor.smtp.twm@mail.ru", "xscriptor.smtp.twm@mail.ru", message
         )
         server.quit()
+    
+    def check_for_messages(self) -> bool:
+        """
+        This method checks for the presence of new messages.
+        """
+        mail = imaplib.IMAP4_SSL("imap.mail.ru")
+        mail.login("xscriptor.smtp.twm@mail.ru", "adfe38Z0XEbrLgZ1ekSx")
+        mail.select("inbox")
+        _, data = mail.search(None, "ALL")
+        mail_ids = data[0]
+        id_list = mail_ids.split()
+        mail.logout()
+        return len(id_list) > 0
 
     def receive(self):
         """
