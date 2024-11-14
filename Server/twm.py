@@ -131,7 +131,7 @@ class TellWithMeCommunicator(
         raw_email_string = raw_email.decode("utf-8")
         email_message = email.message_from_string(raw_email_string)
         
-        rawEmailReceive = email_message.get_payload().split("(|||)")
+        rawEmailReceive = str(email_message.get_payload()).split("(|||)")
         (
             self.send(
             None,
