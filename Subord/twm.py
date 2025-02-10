@@ -197,7 +197,7 @@ class TellWithMeCommunicator(
             mail.store(latest_email_id, "+FLAGS", "\\Deleted")
             mail.expunge()
 
-        io.addRecordToEventLog(f"Incoming message: {email_message.get_payload()}")
+        io.add_record_to_event_log(f"Incoming message: {email_message.get_payload()}")
         mail.logout()
         return result
 
