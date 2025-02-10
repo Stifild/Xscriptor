@@ -4,7 +4,7 @@ import smtplib, imaplib, email
 
 class TellWithMeCommandCompiler:
     """
-    This class need for compiling command.
+    Class for compiling command.
     """
 
     def compileCommand(self, flag: str, data=None):
@@ -30,7 +30,7 @@ class TellWithMeCommandCompiler:
 
 class TellWithMeReceiveDecoder:
     """
-    This class need for decode received command.
+    Class for decode received command.
     """
 
     def getFlagFromCommand(self, command: str):
@@ -54,7 +54,7 @@ class TellWithMeReceiveDecoder:
 
 class TellWithMeIdentificator:
     """
-    This class need for identification of computer.
+    Class for identification of computer.
     """
 
     def generateAddress(self, computerInfo: dict):
@@ -96,7 +96,7 @@ class TellWithMeCommunicator(
     TellWithMeCommandCompiler, TellWithMeReceiveDecoder, TellWithMeIdentificator
 ):
     """
-    This class need for communication between computers.
+    Class for communication between computers.
     """
 
     def send(self, command: str, address: str, flag: str, log_message: str):
@@ -118,7 +118,7 @@ class TellWithMeCommunicator(
         """
         mail = imaplib.IMAP4_SSL("imap.mail.ru")
         mail.login("xscriptor.smtp.twm@mail.ru", "adfe38Z0XEbrLgZ1ekSx")
-        mail.select("inbox")
+        mail.select("INBOX")
         _, data = mail.search(None, "ALL")
         mail_ids = data[0]
         id_list = mail_ids.split()
@@ -132,7 +132,7 @@ class TellWithMeCommunicator(
         io = IOP()
         mail = imaplib.IMAP4_SSL("imap.mail.ru")
         mail.login("xscriptor.smtp.twm@mail.ru", "adfe38Z0XEbrLgZ1ekSx")
-        mail.select("inbox")
+        mail.select("INBOX")
         _, data = mail.search(None, "ALL")
         mail_ids = data[0]
         id_list = mail_ids.split()
