@@ -1,14 +1,14 @@
-from Server.iop import InputOutputProcessor as IOP
-from Server.twm import TellWithMe as SeTWM
+from BCN.Proccesing.utils import Utils as IOP
+from BCN.twm import TellWithMe as SeTWM
 from Subord.twm import TellWithMe as SuTWM
-import os, subprocess, socket, platform, time
+import os, socket, platform, time
 
 io = IOP()
 
 configs = io.load_json("./data/env.json")
 
 if configs["role"] == "Server":
-    from Server.main import bot
+    from BCN.Communication.TelegramCom import bot
     twm = SeTWM()
     while True:
         if twm.check_for_messages():

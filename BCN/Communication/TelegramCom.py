@@ -1,6 +1,6 @@
-from Server.iop import InputOutputProcessor as IOP
+from BCN.Proccesing.utils import Utils as IOP
 import telebot
-from Server.twm import TellWithMe as TWM
+from BCN.twm import TellWithMe as TWM
 from telebot import util, types
 
 io = IOP()

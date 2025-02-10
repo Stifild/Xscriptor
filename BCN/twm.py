@@ -1,4 +1,4 @@
-from Server.iop import InputOutputProcessor as IOP
+from BCN.Proccesing.utils import Utils as IOP
 import smtplib, imaplib, email
 
 
@@ -156,44 +156,44 @@ class TellWithMeCommunicator(
         raw_email_string = raw_email.decode("utf-8")
         email_message = email.message_from_string(raw_email_string)
 
-        rawEmailReceive = str(email_message.get_payload()).split("(|||)")
+        raw_email_receive = str(email_message.get_payload()).split("(|||)")
         (
             self.send(
             None,
-            self.get_subject_from_email(rawEmailReceive[0]).split(":")[0].strip(),
+            self.get_subject_from_email(raw_email_receive[0]).split(":")[0].strip(),
             "ACK",
             "Message received",
             )
-            if self.get_flag_from_command(rawEmailReceive[1]) != "EDCN" or self.get_flag_from_command(rawEmailReceive[1]) != "ACK"
+            if self.get_flag_from_command(raw_email_receive[1]) != "EDCN" or self.get_flag_from_command(raw_email_receive[1]) != "ACK"
             else None
         )
-        if self.get_flag_from_command(rawEmailReceive[1]) == "IND":
+        if self.get_flag_from_command(raw_email_receive[1]) == "IND":
             address = self.generate_address(
                 {
-                    "os": self.get_command_from_command(rawEmailReceive[1]).split(", ")[1],
-                    "name": self.get_command_from_command(rawEmailReceive[1]).split(", ")[0]
+                    "os": self.get_command_from_command(raw_email_receive[1]).split(", ")[1],
+                    "name": self.get_command_from_command(raw_email_receive[1]).split(", ")[0]
                 }
             )
-            name = self.get_command_from_command(rawEmailReceive[1]).split(", ")[0]
+            name = self.get_command_from_command(raw_email_receive[1]).split(", ")[0]
             self.send(
             f"{address}, {name})",
             "255.255.255",
             "INF",
             "Address generated",
             )
-        if self.get_flag_from_command(rawEmailReceive[1]) == "EDCN":
+        if self.get_flag_from_command(raw_email_receive[1]) == "EDCN":
             self.remove_address(
-            self.get_subject_from_email(rawEmailReceive[0]).split(":")[0].strip()
+            self.get_subject_from_email(raw_email_receive[0]).split(":")[0].strip()
             )
-        if self.get_flag_from_command(rawEmailReceive[1]) == "IR":
-            result = self.get_command_from_command(rawEmailReceive[1]), self.get_flag_from_command(rawEmailReceive[1])
-        elif self.get_flag_from_command(rawEmailReceive[1]) == "ERR":
-            result = self.get_command_from_command(rawEmailReceive[1]), self.get_flag_from_command(rawEmailReceive[1])
+        if self.get_flag_from_command(raw_email_receive[1]) == "IR":
+            result = self.get_command_from_command(raw_email_receive[1]), self.get_flag_from_command(raw_email_receive[1])
+        elif self.get_flag_from_command(raw_email_receive[1]) == "ERR":
+            result = self.get_command_from_command(raw_email_receive[1]), self.get_flag_from_command(raw_email_receive[1])
         else:
             result = 0, 0
 
         # Delete email if address is 0.0.0
-        if self.get_subject_from_email(rawEmailReceive[0]).split(":")[0].strip() == "0.0.0":
+        if self.get_subject_from_email(raw_email_receive[0]).split(":")[0].strip() == "0.0.0":
             mail.store(latest_email_id, "+FLAGS", "\\Deleted")
             mail.expunge()
 
