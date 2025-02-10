@@ -1,22 +1,25 @@
-from configs import ROLE
+from Server.iop import InputOutputProcessor as IOP
 from Server.twm import TellWithMe as SeTWM
 from Subord.twm import TellWithMe as SuTWM
 import os, subprocess, socket, platform, time
 
-if ROLE == "Server":
-    from configs import MAIN_USER_ID
+io = IOP()
+
+configs = io.load_json("./data/env.json")
+
+if configs["role"] == "Server":
     from Server.main import bot
     twm = SeTWM()
     while True:
         if twm.check_for_messages():
             receive, flag = twm.receive()
-            bot.send_message(MAIN_USER_ID, f"Flag:{flag}, Receive:{str(receive)}") if flag == "IR" else None
+            bot.send_message(configs["Telegram"]["MAIN_USER_ID"], f"Flag:{flag}, Receive:{str(receive)}") if flag == "IR" else None
         time.sleep(3.5)
         
          
 else:
     twm = SuTWM()
-    twm.send(twm.compileCommand("IND", {"name": socket.gethostname(), "os": platform.platform()}), "0.0.0", "IND", "Hi Server! Can you give me an address?")
+    twm.send(twm.compile_command("IND", f"{socket.gethostname()}, {platform.platform()}"), "0.0.0", "IND", "Hi Server! Can you give me an address?")
     while True:
         if twm.check_for_messages():
             receive, flag = twm.receive()
